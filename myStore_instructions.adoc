@@ -1,0 +1,545 @@
+= Angular Applied
+:icons: font
+:idprefix:
+:idseparator: -
+:sectanchors:
+:sectlinks:
+:sectnums:
+:sourcedir: ../code
+:source-highlighter: highlightjs
+
+*Pre-requisites* 
+
+1. Download and install the current version of Node.js from https://nodejs.org
+
+2. Install Angular CLI by running the following command:
+[source, sh]
+
+----
+npm install @angular/cli -g
+----
+
+== The myStore app
+
+Let's use Angular 5 to develop a myStore app where people can see featured  products and view details of the selected product. The landing page of this app will look like this:
+
+image::images/home1.png[]
+
+When the user clicks on the product title, the product details view is rendered
+
+image::images/product_detail.png[]
+
+=== Initial project setup
+
+We’ll start with generating a new Angular CLI project. After that, will create the home and product detail views by creating additional Angular components, and will create a service to fetch the products info.
+
+Generate a new myStore project:
+
+`ng new myStore --skip-install`
+
+Open the myStore directory in your IDE.
+
+To use Angular 5, open the package.json file and replace the dependencies and devDependencies sections with the following:
+
+[source, js]
+----
+  "dependencies": {
+    "@angular/animations": "^5.0.0-rc.7",
+    "@angular/common": "^5.0.0-rc.7",
+    "@angular/compiler": "^5.0.0-rc.7",
+    "@angular/core": "^5.0.0-rc.7",
+    "@angular/forms": "^5.0.0-rc.7",
+    "@angular/http": "^5.0.0-rc.7",
+    "@angular/platform-browser": "^5.0.0-rc.7",
+    "@angular/platform-browser-dynamic": "^5.0.0-rc.7",
+    "@angular/router": "^5.0.0-rc.7",
+    "core-js": "^2.4.1",
+    "rxjs": "^5.4.2",
+    "zone.js": "^0.8.14"
+  },
+  "devDependencies": {
+    "@angular/cli": "^1.5.0-rc.5",
+    "@angular/compiler-cli": "^5.0.0-rc.7",
+    "@angular/language-service": "^5.0.0-rc.7",
+    "typescript": "~2.4.1"
+  }
+----
+
+Open the integrated Terminal window in your IDE and install Angular and its dependencies:
+
+[source, sh]
+----
+npm install
+----
+
+Build the generated app and open it in the browser at localhost:4200:
+
+[source, sh]
+----
+ng serve -o
+----
+
+The browser will render a small app with an Angular logo and a couple of links. Go back to IDE and kill the server (Ctrl-C in the Terminal window).
+
+In the myStore app, we’ll use the Bootstrap 4 framework for styling. Because Bootstrap depends on jQuery, we'll install it as well:
+
+[source]
+----
+npm i bootstrap@next --save-prod // <1>
+npm i jquery --save-prod <2>
+----
+<1> Install Bootstrap. The --save-prod option will add this dependency to the package.json file. If you use npm older than 5.0, use the --save option instead.
+
+<2> Install jQuery, the Bootstrap's dependency.
+
+Add Bootstrap styles to the `styles` section in .angular-cli.json so it looks as follows:
+
+[source]
+----
+"styles": [
+  "styles.css",
+  "../node_modules/bootstrap/dist/css/bootstrap.css"
+],
+---- 
+
+Add the required scripts for Bootstrap, and jQuery by modifying the section `scripts` in .angular-cli.json to look as follows:
+
+[source]
+----
+"scripts": [
+  "../node_modules/jquery/dist/jquery.js",
+  "../node_modules/bootstrap/dist/js/bootstrap.js"
+],
+----
+
+=== Generating components and a service for myStore
+
+Our app will be consist of several components, e.g. Home, Footer, Navbar, etc. Our project already has the app.component, and now we'll generate more components using the Angular CLI's command `ng generate component` (or `ng g c`). To generate components without test files, run the following commands in the Terminal window:
+
+[source]
+----
+ng g c home -spec=false
+ng g c footer -spec=false
+ng g c navbar -spec=false
+ng g c product-item -spec=false
+ng g c product-detail -spec=false
+ng g c search -spec=false
+----
+
+Each of the above components is generated in a separate folder. Open the file app.module.ts - Angular CLI has added required import statements and declared all of the above components there.
+
+Using the command `ng g s` generate the product service that will provide the data to some of the above components. Since we'll use this service in more than one component, we'll generate it in the shared dir. Specify the `-m` option so it'll add `ProductService` the `providers` property in `@NgModule` the app.module.ts:
+
+[source]
+----
+ng g s shared/product -spec=false -m app.module 
+----
+
+We'll be using the router, so add this import in the app.module.ts:
+
+[source]
+----
+import {RouterModule} from "@angular/router";
+----
+
+Add the following to the imports section of `@NgModule`:
+
+[source]
+----
+RouterModule.forRoot([
+  {path: '',                    component: HomeComponent},
+  {path: 'products/:productId', component: ProductDetailComponent}
+]),
+----
+
+Our root module is configured. Let's implement components and a service.
+
+=== Application component
+
+The generated application component is the root component of myStore and it serves as a host for all other components. The component’s source code consists of four files with the following extensions: .ts, .html, .css, and .spec.ts. 
+
+Replace the content of app.component.html to include the Navbar, Search, Footer, and the router outlet:
+
+[source]
+----
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <app-search></app-search>
+    </div>
+
+    <div class="col-md-9">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
+----
+
+We use the Bootstrap CSS classes here. Run the app with `ng serve -o` and you'll see the following:
+
+image::images/initial_look.png[]
+
+Enjoy the initial version of myStore!
+
+=== Navbar component
+
+Keep the dev server running. Replace the content of the navbar.component.html with a sample Bootstrap Navbar borrowed from https://getbootstrap.com/docs/4.0/components/navbar:
+
+[source]
+----
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+  <a class="navbar-brand" href="#">My Store</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Products</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+----
+
+The browser shows the window with a blue Navbar on top.  
+
+=== Search component 
+
+Replace the content of the search.component.html with this:
+
+[source]
+----
+<form #f="ngForm">
+  <div class="form-group">
+    <label for="title">Product title:</label>
+    <input id="title"
+           placeholder="Title" type="text"
+           name="title" ngModel>
+  </div>
+  <div class="form-group">
+    <label for="price">Product price:</label>
+    <input id="price"
+           placeholder="Price" type="number"
+           name="price" ngModel>
+  </div>
+  <div class="form-group">
+    <label for="category">Category:</label><br/>
+    <select id="category"
+            placeholder="Category"
+            name="category" ngModel>
+      <option>books</option>
+      <option>electronics</option>
+      <option>hardware</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <button type="submit"
+            class="btn btn-primary btn-block">Search</button>
+  </div>
+</form>
+----
+
+=== Footer component
+
+Replace the content of the footer.component.html with this:
+
+[source]
+----
+<div class="container">
+  <hr>
+  <footer>
+    <div class="row">
+      <div class="col-lg-12">
+        <p>Copyright &copy; My Store 2017</p>
+      </div>
+    </div>
+  </footer>
+</div>
+----
+
+=== Product service
+
+The product service will be responsible for service product data. In the shared directore let's create a file product.ts defining the `Product` type:
+
+[source, js]
+----
+export interface Product {
+    id: number,
+    title: string,
+    price: number,
+    rating: number,
+    shortDescription: string,
+    description: string,
+    categories: string[];
+}
+----
+
+The file product.service.ts will contain a class `ProductService` with methods `getProducts()` and `getProductById()`, and an array with hard-coded products
+The provider for `ProductService` is already declared in `AppModule`. This service will be injected into `HomeComponent` and `ProductDetailComponent`.
+
+Replace the code of product.service.ts with the following:
+
+[source, js]
+----
+import {Injectable} from '@angular/core';
+import {Product} from './product';
+
+@Injectable()
+export class ProductService {
+
+  getProducts(): Product[] {
+    return products;
+  }
+
+  getProductById(productId: number): Product {
+    return products.find(p => p.id === productId);
+  }
+}
+
+const products = [
+  {
+    "id": 0,
+    "title": "First Product",
+    "price": 24.99,
+    "rating": 4.3,
+    "shortDescription": "This is a short description of the First Product",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "categories": ["electronics", "hardware"]
+  },
+  {
+    "id": 1,
+    "title": "Second Product",
+    "price": 64.99,
+    "rating": 3.5,
+    "shortDescription": "This is a short description of the Second Product",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "categories": ["books"]
+  },
+  {
+    "id": 2,
+    "title": "Third Product",
+    "price": 74.99,
+    "rating": 4.2,
+    "shortDescription": "This is a short description of the Third Product",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "categories": ["electronics"]
+  },
+  {
+    "id": 3,
+    "title": "Fourth Product",
+    "price": 84.99,
+    "rating": 3.9,
+    "shortDescription": "This is a short description of the Fourth Product",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "categories": ["hardware"]
+  },
+  {
+    "id": 4,
+    "title": "Fifth Product",
+    "price": 94.99,
+    "rating": 5,
+    "shortDescription": "This is a short description of the Fifth Product",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "categories": ["electronics", "hardware"]
+  },
+  {
+    "id": 5,
+    "title": "Sixth Product",
+    "price": 54.99,
+    "rating": 4.6,
+    "shortDescription": "This is a short description of the Sixth Product",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "categories": ["books"]
+  }
+];
+----
+
+=== Product item component
+
+`ProductItemComponent` will know how to render one product that's passed by its parent via the `@Input()` property `product`. Modify the file product-item.component.ts to look like this:
+
+[source]
+----
+import {Component, Input} from '@angular/core';
+import {Product} from "../shared/product";
+
+@Component({
+  selector: 'app-product-item',
+  templateUrl: './product-item.component.html',
+  styleUrls: ['./product-item.component.css']
+})
+export class ProductItemComponent {
+
+  @Input() product: Product;
+}
+----  
+
+We'll use HTML 5 `<figure>`, `<figcaption>` and Bootstrap styles in the file product-item.component.html. Change its content to the following:
+
+[source]
+----
+<figure class="figure">
+  <img src="http://placehold.it/320x150" class="figure-img img-fluid rounded">
+  <figcaption class="figure-caption">
+    <h5><a [routerLink]="['/products', product.id]">{{product.title}}</a>
+        <span>{{product.price | currency}}</span>
+    </h5>
+    <p>{{product.shortDescription}}</p>
+  </figcaption>
+</figure>
+----
+
+To add some margins around the `<figure>` element, let's add styles to product-item.component.css:
+
+[source, css]
+----
+figure {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+----
+
+=== Home component
+
+By default, the home component will occupy the router outlet area and will render several featured product items. Modify the content of home.component.ts to look like this:
+
+[source]
+----
+import {Component, OnInit} from '@angular/core';
+import {Product} from "../shared/product";
+import {ProductService} from "../shared/product.service";
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  products: Product[]=[];
+  constructor(private productService: ProductService) { }
+
+  ngOnInit() {
+    this.products = this.productService.getProducts();
+  }
+}
+----
+
+Angular invokes the lifecycle method `ngOnInit()` after the instance of a component is created. We populate the `products` array there. 
+
+Replace the content of home.component.html to loop through the array `products` with `*ngFor` and render each product:
+
+[source]
+----
+<div class="row">
+  <div *ngFor="let product of products" class="col-sm-4 col-lg-4 col-md-4">
+    <app-product-item [product]="product"></app-product-item>
+  </div>
+</div>
+----
+
+Each product will be represented by the same HTML template. The `*ngFor` directive iterates through the `products` array rendering HTML template for each element. 
+
+Because `*ngFor` is inside `<div>`, each loop iteration will render a `<div>` with the content of the corresponding `<app-product-item>` inside. To pass an instance of a product to `ProductComponent`, you use the square brackets for property binding: `[product]="prod"`, where `[product]` refers to the property named `product` inside the `<app-product-item>` component, and `product` is a local template variable declared on the fly in the `*ngFor` directive as `let product`. 
+
+The styles `col-sm-4 col-lg-4 col-md-4` come from the Bootstrap framework where the viewport’s width is divided into 12 invisible columns. In this example we want to allocate 4 columns (one third of the `<div>`’s width) if a device has small (`sm` means 768px or more), large (`lg` is for 1200px or more), and medium (`md` is for 992px or more) screen sizes. You can read more about the Bootstrap grid system at http://getbootstrap.com/css/#grid.
+
+Now your app should look like this:
+
+image::images/home1.png[]
+
+Start decreasing the width of the browser window to emulate the viewport of a small device. You'll see how Bootstrap will rearrange the components to fit the window.  
+
+=== Product detail component
+
+As per our router configuration, the `ProductDetailComponent` is rendered in the `<router-outlet>` area when the user clicks on the title in the `ProductItemComponent`.
+
+The `ProductDetailComponent` receives the product ID from the parent (via `ActivatedRoute`), and then makes requests to `ProductService` to retrieve the details of the selected product.
+
+Modify the code in product-detail.component.ts to look as follows:
+
+[source]
+----
+import {Component, OnInit} from '@angular/core';
+import {ProductService} from "..//shared/product.service";
+import {Product} from "..//shared/product";
+import {ActivatedRoute} from "@angular/router";
+
+@Component({
+  selector: 'app-product-detail',
+  templateUrl: './product-detail.component.html',
+  styleUrls: ['./product-detail.component.css']
+})
+export class ProductDetailComponent implements OnInit {
+
+  product: Product;
+
+  constructor(private route: ActivatedRoute, private productService: ProductService) {}
+
+  ngOnInit() {
+    let prodId: number = parseInt(this.route.snapshot.params['productId']);
+    this.product = this.productService.getProductById(prodId);
+  }
+}
+----
+
+The product detail template will render the product image (i.e. a large gray rectangle) with product details.  
+
+Modify the content of product-detail.component.html to look like this:
+
+[source]
+----
+<figure class="figure">
+  <img src="http://placehold.it/820x320" class="figure-img img-fluid rounded">
+  <figcaption class="figure-caption">
+    <h4>Title: {{product.title}}</h4>
+    <h5>Price: {{product.price | currency}}</h5>
+    <h5> Description: {{product.description}}</h5>
+    <h5> Rating: {{product.rating}}</h5>
+    <h5>Categories:
+    <ul>
+    <li *ngFor="let category of product.categories">
+      {{category}}
+    </li>
+    </ul></h5>
+  </figcaption>
+</figure>
+----
+
+Add a margin and colors in product-detail.component.css:
+
+[source, css]
+----
+figure {
+  margin-top: 1em;
+}
+
+h4 {
+  color: blue;
+}
+
+h5 {
+  color: brown;
+}
+----
+
+On the home page, click on the title of a product and you'll see its details, for example:
+
+image::images/product_detail.png[]
+
+*The end!*
+
+Send your Angular training inquiries at training@faratasystems.com.
