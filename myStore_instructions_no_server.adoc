@@ -1,4 +1,5 @@
-= Angular Applied
+= Angular Applied by Yakov Fain
+
 :icons: font
 :idprefix:
 :idseparator: -
@@ -8,7 +9,7 @@
 :sourcedir: ../code
 :source-highlighter: highlightjs
 
-*Pre-requisites* 
+*Pre-requisites*  
 
 1. Download and install the current version of Node.js from https://nodejs.org
 
@@ -19,9 +20,9 @@
 npm install @angular/cli -g
 ----
 
-== The myStore app
+== The myStore app 
 
-Let's use Angular 5 to develop a myStore app where people can see featured  products and view details of the selected product. The landing page of this app will look like this:
+Let's use Angular 5 to develop a myStore app where users can see featured  products and view details of the selected product. The landing page of this app will look like this:
 
 image::images/home1.png[]
 
@@ -29,68 +30,26 @@ When the user clicks on the product title, the product details view is rendered
 
 image::images/product_detail.png[]
 
+NOTE: The product data for this app will be hard-coded in the class `ProductService` so you won't need any external server supplying data. If you want to create an Angular app that will get the data from a Java Spring server, following the instructions from the file myStore_instructions_spring_server.html.
+
 === Initial project setup
 
 We’ll start with generating a new Angular CLI project. After that, will create the home and product detail views by creating additional Angular components, and will create a service to fetch the products info.
 
 Generate a new myStore project:
 
-`ng new myStore --skip-install`
+`ng new myStore`
 
 Open the myStore directory in your IDE.
 
-To use Angular 5, open the package.json file and replace the dependencies and devDependencies sections with the following:
-
-[source, js]
-----
-  "dependencies": {
-    "@angular/animations": "^5.0.0-rc.7",
-    "@angular/common": "^5.0.0-rc.7",
-    "@angular/compiler": "^5.0.0-rc.7",
-    "@angular/core": "^5.0.0-rc.7",
-    "@angular/forms": "^5.0.0-rc.7",
-    "@angular/http": "^5.0.0-rc.7",
-    "@angular/platform-browser": "^5.0.0-rc.7",
-    "@angular/platform-browser-dynamic": "^5.0.0-rc.7",
-    "@angular/router": "^5.0.0-rc.7",
-    "core-js": "^2.4.1",
-    "rxjs": "^5.4.2",
-    "zone.js": "^0.8.14"
-  },
-  "devDependencies": {
-    "@angular/cli": "^1.5.0-rc.5",
-    "@angular/compiler-cli": "^5.0.0-rc.7",
-    "@angular/language-service": "^5.0.0-rc.7",
-    "typescript": "~2.4.1"
-  }
-----
-
-Open the integrated Terminal window in your IDE and install Angular and its dependencies:
+In the myStore app, we’ll use the Bootstrap 4 framework for styling. Let's install Bootstrap and its dependencies (jQuery and popper.js) as well. Open the integrated Terminal window in your IDE and install Bootstrap 4 Beta and its dependencies:
 
 [source, sh]
 ----
-npm install
-----
-
-Build the generated app and open it in the browser at localhost:4200:
-
-[source, sh]
-----
-ng serve -o
+npm i bootstrap@next jquery popper.js -P
 ----
 
 The browser will render a small app with an Angular logo and a couple of links. Go back to IDE and kill the server (Ctrl-C in the Terminal window).
-
-In the myStore app, we’ll use the Bootstrap 4 framework for styling. Because Bootstrap depends on jQuery, we'll install it as well:
-
-[source]
-----
-npm i bootstrap@next --save-prod // <1>
-npm i jquery --save-prod <2>
-----
-<1> Install Bootstrap. The --save-prod option will add this dependency to the package.json file. If you use npm older than 5.0, use the --save option instead.
-
-<2> Install jQuery, the Bootstrap's dependency.
 
 Add Bootstrap styles to the `styles` section in .angular-cli.json so it looks as follows:
 
@@ -108,22 +67,31 @@ Add the required scripts for Bootstrap, and jQuery by modifying the section `scr
 ----
 "scripts": [
   "../node_modules/jquery/dist/jquery.js",
+  "../node_modules/popper.js/dist/umd/popper.js",
   "../node_modules/bootstrap/dist/js/bootstrap.js"
 ],
 ----
 
-=== Generating components and a service for myStore
+Build the app and open it in the browser at localhost:4200:
 
-Our app will be consist of several components, e.g. Home, Footer, Navbar, etc. Our project already has the app.component, and now we'll generate more components using the Angular CLI's command `ng generate component` (or `ng g c`). To generate components without test files, run the following commands in the Terminal window:
+[source, sh]
+----
+ng serve -o
+----
+
+
+=== Adding components, service, and routes
+
+Our app will be consist of several components, e.g. Home, Footer, Navbar, etc. Our project already has the app.component, and now we'll generate more components using the Angular CLI's command `ng generate component` (or `ng g c`). To generate components without test files, open another Terminal window and run the following commands:
 
 [source]
 ----
-ng g c home -spec=false
-ng g c footer -spec=false
-ng g c navbar -spec=false
-ng g c product-item -spec=false
-ng g c product-detail -spec=false
-ng g c search -spec=false
+ng g c home -spec false
+ng g c footer -spec false
+ng g c navbar -spec false
+ng g c product-item -spec false
+ng g c product-detail -spec false
+ng g c search -spec false
 ----
 
 Each of the above components is generated in a separate folder. Open the file app.module.ts - Angular CLI has added required import statements and declared all of the above components there.
@@ -132,24 +100,28 @@ Using the command `ng g s` generate the product service that will provide the da
 
 [source]
 ----
-ng g s shared/product -spec=false -m app.module 
+ng g s shared/product -spec false -m app.module 
 ----
 
-We'll be using the router, so add this import in the app.module.ts:
-
-[source]
-----
-import {RouterModule} from "@angular/router";
-----
-
-Add the following to the imports section of `@NgModule`:
+To navigate to the product detail view we'll be using Angular router. Add the following import statement to the app.module.ts:
 
 [source]
 ----
-RouterModule.forRoot([
-  {path: '',                    component: HomeComponent},
-  {path: 'products/:productId', component: ProductDetailComponent}
-]),
+import {RouterModule} from '@angular/router';
+----
+
+Add the routes configuration to the `imports` section of `@NgModule`:
+
+[source]
+----
+  imports: [
+    RouterModule.forRoot([
+      {path: '',                    component: HomeComponent},
+      {path: 'products/:productId', component: ProductDetailComponent}
+    ]),
+    ...
+]
+
 ----
 
 Our root module is configured. Let's implement components and a service.
@@ -158,7 +130,7 @@ Our root module is configured. Let's implement components and a service.
 
 The generated application component is the root component of myStore and it serves as a host for all other components. The component’s source code consists of four files with the following extensions: .ts, .html, .css, and .spec.ts. 
 
-Replace the content of app.component.html to include the Navbar, Search, Footer, and the router outlet:
+Replace the content of app.component.html to include the Navbar, Search, Footer, and the router outlet (we use the Bootstrap CSS classes):
 
 [source]
 ----
@@ -179,7 +151,7 @@ Replace the content of app.component.html to include the Navbar, Search, Footer,
 <app-footer></app-footer>
 ----
 
-We use the Bootstrap CSS classes here. Run the app with `ng serve -o` and you'll see the following:
+Run the app with `ng serve -o` and you'll see the following:
 
 image::images/initial_look.png[]
 
@@ -270,17 +242,17 @@ Replace the content of the footer.component.html with this:
 
 === Product service
 
-The product service will be responsible for service product data. In the shared directore let's create a file product.ts defining the `Product` type:
+The product service will be responsible for service product data. In the shared directory, let's create a file product.ts defining the `Product` type:
 
 [source, js]
 ----
 export interface Product {
-    id: number,
-    title: string,
-    price: number,
-    rating: number,
-    shortDescription: string,
-    description: string,
+    id: number;
+    title: string;
+    price: number;
+    rating: number;
+    shortDescription: string;
+    description: string;
     categories: string[];
 }
 ----
@@ -372,7 +344,7 @@ const products = [
 [source]
 ----
 import {Component, Input} from '@angular/core';
-import {Product} from "../shared/product";
+import {Product} from '../shared/product';
 
 @Component({
   selector: 'app-product-item',
@@ -419,8 +391,8 @@ By default, the home component will occupy the router outlet area and will rende
 [source]
 ----
 import {Component, OnInit} from '@angular/core';
-import {Product} from "../shared/product";
-import {ProductService} from "../shared/product.service";
+import {Product} from '../shared/product';
+import {ProductService} from '../shared/product.service';
 
 @Component({
   selector: 'app-home',
@@ -465,7 +437,9 @@ Start decreasing the width of the browser window to emulate the viewport of a sm
 
 === Product detail component
 
-As per our router configuration, the `ProductDetailComponent` is rendered in the `<router-outlet>` area when the user clicks on the title in the `ProductItemComponent`.
+To navigate to the product detail view we'll be using Angular router configured earlier in section "Adding components, service, and routes".
+
+The `ProductDetailComponent` is rendered in the router outlet area when the user clicks on the title in the `ProductItemComponent`.
 
 The `ProductDetailComponent` receives the product ID from the parent (via `ActivatedRoute`), and then makes requests to `ProductService` to retrieve the details of the selected product.
 
@@ -474,9 +448,9 @@ Modify the code in product-detail.component.ts to look as follows:
 [source]
 ----
 import {Component, OnInit} from '@angular/core';
-import {ProductService} from "..//shared/product.service";
-import {Product} from "..//shared/product";
-import {ActivatedRoute} from "@angular/router";
+import {ProductService} from '..//shared/product.service';
+import {Product} from '..//shared/product';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-product-detail',

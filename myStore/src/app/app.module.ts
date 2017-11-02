@@ -11,6 +11,8 @@ import { SearchComponent } from './search/search.component';
 import {RouterModule} from "@angular/router";
 import {FormsModule} from '@angular/forms';
 import { ProductService } from './shared/product.service';
+import {RealProductService} from './shared/real-product.service';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,13 +26,15 @@ import { ProductService } from './shared/product.service';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
       {path: '',                    component: HomeComponent},
       {path: 'products/:productId', component: ProductDetailComponent}
     ]),
   ],
-  providers: [ProductService],
+  // providers: [ProductService],
+  providers: [{provide: ProductService, useClass: RealProductService}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

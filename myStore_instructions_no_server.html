@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>Angular Applied</title>
+<title>Angular Applied by Yakov Fain</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -424,11 +424,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
 <body class="article">
 <div id="header">
-<h1>Angular Applied</h1>
+<h1>Angular Applied by Yakov Fain</h1>
 </div>
 <div id="content">
 <div id="preamble">
@@ -457,7 +456,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="the-mystore-app"><a class="anchor" href="#the-mystore-app"></a><a class="link" href="#the-mystore-app">1. The myStore app</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Let&#8217;s use Angular 5 to develop a myStore app where people can see featured  products and view details of the selected product. The landing page of this app will look like this:</p>
+<p>Let&#8217;s use Angular 5 to develop a myStore app where users can see featured  products and view details of the selected product. The landing page of this app will look like this:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -472,6 +471,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <img src="images/product_detail.png" alt="product detail">
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The product data for this app will be hard-coded in the class <code>ProductService</code> so you won&#8217;t need any external server supplying data. If you want to create an Angular app that will get the data from a Java Spring server, following the instructions from the file myStore_instructions_spring_server.html.
+</td>
+</tr>
+</table>
+</div>
 <div class="sect2">
 <h3 id="initial-project-setup"><a class="anchor" href="#initial-project-setup"></a><a class="link" href="#initial-project-setup">1.1. Initial project setup</a></h3>
 <div class="paragraph">
@@ -481,77 +492,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Generate a new myStore project:</p>
 </div>
 <div class="paragraph">
-<p><code>ng new myStore --skip-install</code></p>
+<p><code>ng new myStore</code></p>
 </div>
 <div class="paragraph">
 <p>Open the myStore directory in your IDE.</p>
 </div>
 <div class="paragraph">
-<p>To use Angular 5, open the package.json file and replace the dependencies and devDependencies sections with the following:</p>
+<p>In the myStore app, we’ll use the Bootstrap 4 framework for styling. Let&#8217;s install Bootstrap and its dependencies (jQuery and popper.js) as well. Open the integrated Terminal window in your IDE and install Bootstrap 4 Beta and its dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">  "dependencies": {
-    "@angular/animations": "^5.0.0-rc.7",
-    "@angular/common": "^5.0.0-rc.7",
-    "@angular/compiler": "^5.0.0-rc.7",
-    "@angular/core": "^5.0.0-rc.7",
-    "@angular/forms": "^5.0.0-rc.7",
-    "@angular/http": "^5.0.0-rc.7",
-    "@angular/platform-browser": "^5.0.0-rc.7",
-    "@angular/platform-browser-dynamic": "^5.0.0-rc.7",
-    "@angular/router": "^5.0.0-rc.7",
-    "core-js": "^2.4.1",
-    "rxjs": "^5.4.2",
-    "zone.js": "^0.8.14"
-  },
-  "devDependencies": {
-    "@angular/cli": "^1.5.0-rc.5",
-    "@angular/compiler-cli": "^5.0.0-rc.7",
-    "@angular/language-service": "^5.0.0-rc.7",
-    "typescript": "~2.4.1"
-  }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Open the integrated Terminal window in your IDE and install Angular and its dependencies:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">npm install</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Build the generated app and open it in the browser at localhost:4200:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">ng serve -o</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">npm i bootstrap@next jquery popper.js -P</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The browser will render a small app with an Angular logo and a couple of links. Go back to IDE and kill the server (Ctrl-C in the Terminal window).</p>
-</div>
-<div class="paragraph">
-<p>In the myStore app, we’ll use the Bootstrap 4 framework for styling. Because Bootstrap depends on jQuery, we&#8217;ll install it as well:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code>npm i bootstrap@next --save-prod <i class="conum" data-value="1"></i><b>(1)</b>
-npm i jquery --save-prod <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Install Bootstrap. The --save-prod option will add this dependency to the package.json file. If you use npm older than 5.0, use the --save option instead.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Install jQuery, the Bootstrap&#8217;s dependency.</td>
-</tr>
-</table>
 </div>
 <div class="paragraph">
 <p>Add Bootstrap styles to the <code>styles</code> section in .angular-cli.json so it looks as follows:</p>
@@ -571,24 +526,33 @@ npm i jquery --save-prod <i class="conum" data-value="2"></i><b>(2)</b></code></
 <div class="content">
 <pre class="highlightjs highlight"><code>"scripts": [
   "../node_modules/jquery/dist/jquery.js",
+  "../node_modules/popper.js/dist/umd/popper.js",
   "../node_modules/bootstrap/dist/js/bootstrap.js"
 ],</code></pre>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="generating-components-and-a-service-for-mystore"><a class="anchor" href="#generating-components-and-a-service-for-mystore"></a><a class="link" href="#generating-components-and-a-service-for-mystore">1.2. Generating components and a service for myStore</a></h3>
 <div class="paragraph">
-<p>Our app will be consist of several components, e.g. Home, Footer, Navbar, etc. Our project already has the app.component, and now we&#8217;ll generate more components using the Angular CLI&#8217;s command <code>ng generate component</code> (or <code>ng g c</code>). To generate components without test files, run the following commands in the Terminal window:</p>
+<p>Build the app and open it in the browser at localhost:4200:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>ng g c home -spec=false
-ng g c footer -spec=false
-ng g c navbar -spec=false
-ng g c product-item -spec=false
-ng g c product-detail -spec=false
-ng g c search -spec=false</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">ng serve -o</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="adding-components-service-and-routes"><a class="anchor" href="#adding-components-service-and-routes"></a><a class="link" href="#adding-components-service-and-routes">1.2. Adding components, service, and routes</a></h3>
+<div class="paragraph">
+<p>Our app will be consist of several components, e.g. Home, Footer, Navbar, etc. Our project already has the app.component, and now we&#8217;ll generate more components using the Angular CLI&#8217;s command <code>ng generate component</code> (or <code>ng g c</code>). To generate components without test files, open another Terminal window and run the following commands:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>ng g c home -spec false
+ng g c footer -spec false
+ng g c navbar -spec false
+ng g c product-item -spec false
+ng g c product-detail -spec false
+ng g c search -spec false</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -599,26 +563,29 @@ ng g c search -spec=false</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>ng g s shared/product -spec=false -m app.module</code></pre>
+<pre class="highlightjs highlight"><code>ng g s shared/product -spec false -m app.module</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>We&#8217;ll be using the router, so add this import in the app.module.ts:</p>
+<p>To navigate to the product detail view we&#8217;ll be using Angular router. Add the following import statement to the app.module.ts:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>import {RouterModule} from "@angular/router";</code></pre>
+<pre class="highlightjs highlight"><code>import {RouterModule} from '@angular/router';</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Add the following to the imports section of <code>@NgModule</code>:</p>
+<p>Add the routes configuration to the <code>imports</code> section of <code>@NgModule</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>RouterModule.forRoot([
-  {path: '',                    component: HomeComponent},
-  {path: 'products/:productId', component: ProductDetailComponent}
-]),</code></pre>
+<pre class="highlightjs highlight"><code>  imports: [
+    RouterModule.forRoot([
+      {path: '',                    component: HomeComponent},
+      {path: 'products/:productId', component: ProductDetailComponent}
+    ]),
+    ...
+]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -631,7 +598,7 @@ ng g c search -spec=false</code></pre>
 <p>The generated application component is the root component of myStore and it serves as a host for all other components. The component’s source code consists of four files with the following extensions: .ts, .html, .css, and .spec.ts.</p>
 </div>
 <div class="paragraph">
-<p>Replace the content of app.component.html to include the Navbar, Search, Footer, and the router outlet:</p>
+<p>Replace the content of app.component.html to include the Navbar, Search, Footer, and the router outlet (we use the Bootstrap CSS classes):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -653,7 +620,7 @@ ng g c search -spec=false</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>We use the Bootstrap CSS classes here. Run the app with <code>ng serve -o</code> and you&#8217;ll see the following:</p>
+<p>Run the app with <code>ng serve -o</code> and you&#8217;ll see the following:</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -757,17 +724,17 @@ ng g c search -spec=false</code></pre>
 <div class="sect2">
 <h3 id="product-service"><a class="anchor" href="#product-service"></a><a class="link" href="#product-service">1.7. Product service</a></h3>
 <div class="paragraph">
-<p>The product service will be responsible for service product data. In the shared directore let&#8217;s create a file product.ts defining the <code>Product</code> type:</p>
+<p>The product service will be responsible for service product data. In the shared directory, let&#8217;s create a file product.ts defining the <code>Product</code> type:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">export interface Product {
-    id: number,
-    title: string,
-    price: number,
-    rating: number,
-    shortDescription: string,
-    description: string,
+    id: number;
+    title: string;
+    price: number;
+    rating: number;
+    shortDescription: string;
+    description: string;
     categories: string[];
 }</code></pre>
 </div>
@@ -863,7 +830,7 @@ const products = [
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>import {Component, Input} from '@angular/core';
-import {Product} from "../shared/product";
+import {Product} from '../shared/product';
 
 @Component({
   selector: 'app-product-item',
@@ -914,8 +881,8 @@ export class ProductItemComponent {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>import {Component, OnInit} from '@angular/core';
-import {Product} from "../shared/product";
-import {ProductService} from "../shared/product.service";
+import {Product} from '../shared/product';
+import {ProductService} from '../shared/product.service';
 
 @Component({
   selector: 'app-home',
@@ -972,7 +939,10 @@ export class HomeComponent implements OnInit {
 <div class="sect2">
 <h3 id="product-detail-component"><a class="anchor" href="#product-detail-component"></a><a class="link" href="#product-detail-component">1.10. Product detail component</a></h3>
 <div class="paragraph">
-<p>As per our router configuration, the <code>ProductDetailComponent</code> is rendered in the <code>&lt;router-outlet&gt;</code> area when the user clicks on the title in the <code>ProductItemComponent</code>.</p>
+<p>To navigate to the product detail view we&#8217;ll be using Angular router configured earlier in section "Adding components, service, and routes".</p>
+</div>
+<div class="paragraph">
+<p>The <code>ProductDetailComponent</code> is rendered in the router outlet area when the user clicks on the title in the <code>ProductItemComponent</code>.</p>
 </div>
 <div class="paragraph">
 <p>The <code>ProductDetailComponent</code> receives the product ID from the parent (via <code>ActivatedRoute</code>), and then makes requests to <code>ProductService</code> to retrieve the details of the selected product.</p>
@@ -983,9 +953,9 @@ export class HomeComponent implements OnInit {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>import {Component, OnInit} from '@angular/core';
-import {ProductService} from "..//shared/product.service";
-import {Product} from "..//shared/product";
-import {ActivatedRoute} from "@angular/router";
+import {ProductService} from '..//shared/product.service';
+import {Product} from '..//shared/product';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-product-detail',
@@ -1068,11 +1038,8 @@ h5 {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-10-28 11:13:06 EDT
+Last updated 2017-11-02 10:56:07 EDT
 </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlighting()</script>
 </body>
 </html>
