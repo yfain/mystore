@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {Product} from "../shared/product";
-import {ProductService} from "../shared/product.service";
+import {Component, OnInit} from '@angular/core';
+import {Product} from '../shared/product';
+import {ProductService} from '../shared/product.service';
 
 @Component({
-  selector: 'auction-home',
+  selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
