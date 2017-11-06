@@ -575,4 +575,4 @@ image::images/product_detail.png[]
 
 *The end!*
 
-Send your Angular training inquiries at training@faratasystems.com.
+P.S. I'm bloging on Angular-related topics at https://yakovfain.com.

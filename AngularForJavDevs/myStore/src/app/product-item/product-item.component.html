@@ -1,0 +1,9 @@
+<figure class="figure">
+  <img src="http://placehold.it/320x150" class="figure-img img-fluid rounded">
+  <figcaption class="figure-caption">
+    <h5><a [routerLink]="['/products', product.id]">{{product.title}}</a>
+      <span>{{product.price | currency}}</span>
+    </h5>
+    <p>{{product.shortDescription}}</p>
+  </figcaption>
+</figure>
