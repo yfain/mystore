@@ -1,4 +1,4 @@
-= Angular/Spring app by Yakov Fain
+= Angular for Java Developers by Yakov Fain
 
 :icons: font
 :idprefix:
@@ -20,7 +20,7 @@
 npm install @angular/cli -g
 ----
 
-In this tutorial I used Angular 5 and Angular CLI 1.5.0 (to check the version: `ng -v`).
+In this tutorial we'll use Angular 5 and Angular CLI 1.5.0 (to check the version: `ng -v`).
 
 NOTE: The instructions in this file are written for Java developers who are familiar with Spring Boot, have Java 8 installed and know how run a Java app from an IDE or using Maven.
 
@@ -40,7 +40,7 @@ When the user clicks on the product title, the product details view is rendered
 
 image::images/product_detail.png[]
 
-=== Initial project setup
+=== Initial Angular project setup
 
 We’ll start with generating a new Angular CLI project. After that, will create the home and product detail views by creating additional Angular components, and will create a service to fetch the products info.
 
@@ -461,6 +461,36 @@ h5 {
 On the home page, click on the title of a product and you'll see its details, for example:
 
 image::images/product_detail.png[]
+
+=== Deploying in Spring Boot (if time permits)
+
+Install packages for removing files/dirs (rimraf), copying files (copyfiles), and creating new dirs (mkdirp):
+
+[source, sh]
+----
+npm i rimraf copyfiles mkdirp --save-dev
+----
+
+Add the following commands to the scripts section in package.json:
+
+[source, sh]
+----
+"buildprod": "ng build --prod",
+"postbuildprod": "npm run deploy",
+"predeploy": "rimraf .../server/src/main/resources/static && mkdirp ../server/src/main/resources/static",
+"deploy": "copyfiles -f dist/** ../server/src/main/resources/static",
+----
+
+Run the deployment scripts:
+
+[source, sh]
+----
+npm run buildprod
+----
+
+In your browser go to the Spring Boot URL: http://localhost:8080. The myStoreApp is rendered by the Spring Boot server.
+
+
 
 *The end!*
 

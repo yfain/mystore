@@ -576,3 +576,5 @@ image::images/product_detail.png[]
 *The end!*
 
 P.S. I'm bloging on Angular-related topics at https://yakovfain.com.
+
+P.S.S. NOTE: If you want to run the version of this app that communicates with the Spring Boot server, see instructions in AngularForJavaDevs/myStore_spring_boot.html.

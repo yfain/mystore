@@ -3,6 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+
+    "buildprod": "ng build --prod",
+    "postbuildprod": "npm run deploy",
+    "predeploy": "rimraf .../server/src/main/resources/static && mkdirp ../server/src/main/resources/static",
+    "deploy": "copyfiles -f dist/** ../server/src/main/resources/static",
+
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",

@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<title>Angular/Spring app by Yakov Fain</title>
+<title>Angular for Java Developers by Yakov Fain</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -427,7 +427,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Angular/Spring app by Yakov Fain</h1>
+<h1>Angular for Java Developers by Yakov Fain</h1>
 </div>
 <div id="content">
 <div id="preamble">
@@ -451,7 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>In this tutorial I used Angular 5 and Angular CLI 1.5.0 (to check the version: <code>ng -v</code>).</p>
+<p>In this tutorial we&#8217;ll use Angular 5 and Angular CLI 1.5.0 (to check the version: <code>ng -v</code>).</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -498,7 +498,7 @@ The instructions in this file are written for Java developers who are familiar w
 </div>
 </div>
 <div class="sect2">
-<h3 id="initial-project-setup"><a class="anchor" href="#initial-project-setup"></a><a class="link" href="#initial-project-setup">2.1. Initial project setup</a></h3>
+<h3 id="initial-angular-project-setup"><a class="anchor" href="#initial-angular-project-setup"></a><a class="link" href="#initial-angular-project-setup">2.1. Initial Angular project setup</a></h3>
 <div class="paragraph">
 <p>We’ll start with generating a new Angular CLI project. After that, will create the home and product detail views by creating additional Angular components, and will create a service to fetch the products info.</p>
 </div>
@@ -986,6 +986,39 @@ h5 {
 <img src="images/product_detail.png" alt="product detail">
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="deploying-in-spring-boot-if-time-permits"><a class="anchor" href="#deploying-in-spring-boot-if-time-permits"></a><a class="link" href="#deploying-in-spring-boot-if-time-permits">2.10. Deploying in Spring Boot (if time permits)</a></h3>
+<div class="paragraph">
+<p>Install packages for removing files/dirs (rimraf), copying files (copyfiles), and creating new dirs (mkdirp):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">npm i rimraf copyfiles mkdirp --save-dev</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add the following commands to the scripts section in package.json:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">"buildprod": "ng build --prod",
+"postbuildprod": "npm run deploy",
+"predeploy": "rimraf .../server/src/main/resources/static &amp;&amp; mkdirp ../server/src/main/resources/static",
+"deploy": "copyfiles -f dist/** ../server/src/main/resources/static",</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the deployment scripts:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">npm run buildprod</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In your browser go to the Spring Boot URL: <a href="http://localhost:8080" class="bare">http://localhost:8080</a>. The myStoreApp is rendered by the Spring Boot server.</p>
+</div>
 <div class="paragraph">
 <p><strong>The end!</strong></p>
 </div>
@@ -998,7 +1031,7 @@ h5 {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-05 22:04:21 EST
+Last updated 2017-11-06 11:16:26 EST
 </div>
 </div>
 </body>
