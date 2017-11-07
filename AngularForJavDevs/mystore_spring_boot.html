@@ -570,6 +570,23 @@ ng g c product-detail -spec false</code></pre>
 <div class="paragraph">
 <p>Each of the above components is generated in a separate folder. Open the file app.module.ts - Angular CLI has added required import statements and declared all of the above components there.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Angular CLI 1.5.0 has a bug and you need to manually update the first line in the generated .ts files of the components to look like this:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">import {Component, OnInit, ViewEncapsulation} from '@angular/core';</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Using the command <code>ng g s</code> generate the product service that will provide the data to some of the above components. Since we&#8217;ll use this service in more than one component, we&#8217;ll generate it in the shared dir. Specify the <code>-m</code> option so it&#8217;ll add <code>ProductService</code> the <code>providers</code> property in <code>@NgModule</code> the app.module.ts:</p>
 </div>
@@ -1031,7 +1048,7 @@ h5 {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-06 11:16:26 EST
+Last updated 2017-11-07 12:27:31 EST
 </div>
 </div>
 </body>

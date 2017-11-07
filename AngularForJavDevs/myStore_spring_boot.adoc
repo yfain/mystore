@@ -101,6 +101,13 @@ ng g c product-detail -spec false
 
 Each of the above components is generated in a separate folder. Open the file app.module.ts - Angular CLI has added required import statements and declared all of the above components there.
 
+NOTE: Angular CLI 1.5.0 has a bug and you need to manually update the first line in the generated .ts files of the components to look like this:
+
+[source, js]
+----
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+----
+
 Using the command `ng g s` generate the product service that will provide the data to some of the above components. Since we'll use this service in more than one component, we'll generate it in the shared dir. Specify the `-m` option so it'll add `ProductService` the `providers` property in `@NgModule` the app.module.ts:
 
 [source]
