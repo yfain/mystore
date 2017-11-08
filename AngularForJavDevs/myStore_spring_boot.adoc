@@ -241,7 +241,7 @@ export class ProductService {
 
   getProductById(productId: number): Product {
 
-    let product:Product =<any>{};
+    const product: Product = <Product> {};
 
     this.httpClient.get<Product>(`/api/products/${productId}`)
       .subscribe(

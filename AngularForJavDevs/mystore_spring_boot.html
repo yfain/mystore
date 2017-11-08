@@ -734,7 +734,7 @@ export class ProductService {
 
   getProductById(productId: number): Product {
 
-    let product:Product =&lt;any&gt;{};
+    const product: Product = &lt;Product&gt; {};
 
     this.httpClient.get&lt;Product&gt;(`/api/products/${productId}`)
       .subscribe(
@@ -1048,7 +1048,7 @@ h5 {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-07 12:27:31 EST
+Last updated 2017-11-08 10:36:38 EST
 </div>
 </div>
 </body>
