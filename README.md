@@ -1,4 +1,4 @@
-# Develop a simle mystore in Angular 5
+# Develop a simple mystore app in Angular 5
 
 **Angular 5/Bootstrap 4: two presentations**
 
