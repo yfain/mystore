@@ -1,4 +1,4 @@
-# mystore
+# Develop a simle mystore in Angular 5
 
 **Angular 5/Bootstrap 4: two presentations**
 
