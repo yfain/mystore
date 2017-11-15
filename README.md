@@ -9,4 +9,4 @@ The video of Angular Applied is available at https://www.youtube.com/watch?v=owZ
 
 The video of Angular for Java Devs is available at https://www.youtube.com/watch?v=7Ott2mwtp9c
 
-If you're interested in ANgular training or consuling, send an email to info @ faratasystems.com.
+If you're interested in Angular training or consuling, send an email to info @ faratasystems.com.
