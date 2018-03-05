@@ -1,12 +1,8 @@
 # Develop a simple mystore app in Angular 5
 
-**Angular 5/Bootstrap 4: two presentations**
+**Angular 5/Bootstrap 4: two workshops**
 
-This repo contains materials from my two presentations: "Angular Applied" and "Angular fo Java Devs". The formaer contains instructions, slides and the 3-hour video of my presentaion of the Devoxx conference where I build a sample app
-that uses hard-coded data. In the latter, I build a similar app that communicates with the Java Spring Boot server.
+This repo contains materials from my two workshops. 
+"Angular Applied"  contains instructions and slides of my 3-hour workshop where we build an app with Angular and Bootstrap with the hard-coded data on the client.  "Angular for Java Devs" is a one-hour workshop  where the Angular app gets the data from a Spring Boot server.
 
-The video of Angular Applied is available at https://www.youtube.com/watch?v=owZVKNg6cG4
-
-The video of Angular for Java Devs is available at https://www.youtube.com/watch?v=7Ott2mwtp9c
-
-If you're interested in Angular training or consuling, send an email to info @ faratasystems.com.
+If you're interested in Angular training or consulting, send an email to info @ faratasystems.com.

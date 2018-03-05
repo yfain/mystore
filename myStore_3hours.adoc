@@ -60,7 +60,7 @@ In the myStore app, we’ll use the Bootstrap 4 framework for styling. Let's ins
 
 [source, sh]
 ----
-npm i bootstrap@next jquery popper.js -P
+npm i bootstrap jquery popper.js -P
 ----
 
 Add Bootstrap styles to the `styles` section in .angular-cli.json so it looks as follows:
