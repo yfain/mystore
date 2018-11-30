@@ -11,7 +11,7 @@
 
 *Pre-requisites*  
 
-1. Download and install the current version of Node.js from https://nodejs.org. It comes with the npm project manager. 
+1. Download and install the current version of Node.js from https://nodejs.org
 
 2. Install Angular CLI by running the following command:
 [source, sh]
@@ -20,15 +20,13 @@
 npm install @angular/cli -g
 ----
 
-In this tutorial we'll use Angular 7 and Angular CLI 7.1 (to check the version: `ng version`).
+In this tutorial we'll use Angular 5 and Angular CLI 1.5.0 (to check the version: `ng -v`).
 
-NOTE: Yarn is faster than npm, but you have to install it separately: `npm install yarn`
-
-NOTE: The instructions in this file are written for Java developers who are familiar with Spring Boot, have Java 8+ installed and know how run a Java app from an IDE or using Maven.
+NOTE: The instructions in this file are written for Java developers who are familiar with Spring Boot, have Java 8 installed and know how run a Java app from an IDE or using Maven.
 
 == Starting the Java Spring Boot server
 
-The code of the Spring Boot server that serves that product data is located in the directory called *server*. This app starts on port 8080 and serves the data in a JSON format. Start this server either as a Java app in your IDE, or by running `mvn spring-boot:run`.
+The code of the Spring Boot server that serves that product data is located in the directory server. This app starts on port 8080 and serves the data in a JSON format. Start this server either as a Java app in your IDE, or by running `mvn spring-boot:run`.
 
 To see the data about all products, start the app and enter the following URL in the browser: http://localhost:8080/api/products. To see the data about a single product, specify its ID (from 0 to 5), e.g. http://localhost:8080/api/products/0.
 
@@ -50,11 +48,7 @@ Generate a new myStore project:
 
 `ng new myStore`
 
-Answer No to the question if you want to add Angular routing (we'll do it manually).
-
-Select CSS as your stylesheet format.  
-
-After the project is generated and all dependencies are installed, open the myStore directory in your IDE.
+Open the myStore directory in your IDE.
 
 In the myStore app, we’ll use the Bootstrap 4 framework for styling. Because Bootstrap depends on jQuery, we'll install Bootstrap and its dependencies (jQuery and popper.js) as well.
 
@@ -62,27 +56,27 @@ Open the integrated Terminal window in your IDE and install Bootstrap 4 Beta and
 
 [source, sh]
 ----
-yarn add bootstrap jquery popper.js 
+npm i bootstrap@next jquery popper.js --save-prod
 ----
 
-Add Bootstrap styles to the `styles` section in angular.json so it looks as follows:
+Add Bootstrap styles to the `styles` section in .angular-cli.json so it looks as follows:
 
 [source]
 ----
 "styles": [
   "styles.css",
-  "./node_modules/bootstrap/dist/css/bootstrap.min.css"
+  "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 ],
 ---- 
 
-Add the required scripts for Bootstrap, and jQuery by modifying the section `scripts` in angular.json to look as follows:
+Add the required scripts for Bootstrap, and jQuery by modifying the section `scripts` in .angular-cli.json to look as follows:
 
 [source]
 ----
 "scripts": [
-  "./node_modules/jquery/dist/jquery.min.js",
-  "./node_modules/popper.js/dist/umd/popper.min.js",
-  "./node_modules/bootstrap/dist/js/bootstrap.min.js"
+  "../node_modules/jquery/dist/jquery.min.js",
+  "../node_modules/popper.js/dist/umd/popper.min.js",
+  "../node_modules/bootstrap/dist/js/bootstrap.min.js"
 ],
 ----
 
@@ -99,19 +93,26 @@ Our app will be consist of several components, e.g. Home, Footer, Navbar, etc. O
 
 [source]
 ----
-ng g c home --spec false
-ng g c navbar --spec false
-ng g c product-item --spec false
-ng g c product-detail --spec false
+ng g c home -spec false
+ng g c navbar -spec false
+ng g c product-item -spec false
+ng g c product-detail -spec false
 ----
 
 Each of the above components is generated in a separate folder. Open the file app.module.ts - Angular CLI has added required import statements and declared all of the above components there.
 
-Using the command `ng g s` generate the product service that will provide the data to some of the above components. Since we'll use this service in more than one component, we'll generate it in the shared dir:
+NOTE: Angular CLI 1.5.0 has a bug and you need to manually update the first line in the generated .ts files of the components to look like this:
+
+[source, js]
+----
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+----
+
+Using the command `ng g s` generate the product service that will provide the data to some of the above components. Since we'll use this service in more than one component, we'll generate it in the shared dir. Specify the `-m` option so it'll add `ProductService` the `providers` property in `@NgModule` the app.module.ts:
 
 [source]
 ----
-ng g s shared/product --spec false 
+ng g s shared/product -spec false -m app.module 
 ----
 
 To navigate to the product detail view we'll be using Angular router. Add the following import statement to the app.module.ts:
@@ -188,11 +189,11 @@ Replace the content of the navbar.component.html with a sample Bootstrap Navbar 
 </nav>
 ----
 
-Direct your browser to localhost:4200. The browser shows the window with a light grey Navbar on top.  
+The browser shows the window with a light grey Navbar on top.  
 
 === Product service
 
-The product service will be responsible for service product data. In the *shared* directory, let's create a file product.ts and define the `Product` type there:
+The product service will be responsible for service product data. In the shared directory, let's create a file product.ts defining the `Product` type:
 
 [source, js]
 ----
@@ -218,9 +219,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Product} from './product';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ProductService {
 
   constructor(private httpClient: HttpClient) { }
@@ -392,6 +391,7 @@ Now the dev server will redirect all HTTP request that have `/api` in the URL to
 
 image::images/landing.png[]
 
+
 === Product detail component
 
 The `ProductDetailComponent` is rendered in the router outlet area when the user clicks on the title in the `ProductItemComponent`.
@@ -469,13 +469,13 @@ On the home page, click on the title of a product and you'll see its details, fo
 
 image::images/product_detail.png[]
 
-=== Deploying in Spring Boot 
+=== Deploying in Spring Boot (if time permits)
 
 Install packages for removing files/dirs (rimraf), copying files (copyfiles), and creating new dirs (mkdirp):
 
 [source, sh]
 ----
-yarn add rimraf copyfiles mkdirp --save-dev
+npm i rimraf copyfiles mkdirp --save-dev
 ----
 
 Add the following commands to the scripts section in package.json:
@@ -484,8 +484,8 @@ Add the following commands to the scripts section in package.json:
 ----
 "buildprod": "ng build --prod",
 "postbuildprod": "npm run deploy",
-"predeploy": "rimraf ../server/src/main/resources/static && mkdirp ../server/src/main/resources/static",
-"deploy": "copyfiles -f dist/**/* ../server/src/main/resources/static",
+"predeploy": "rimraf .../server/src/main/resources/static && mkdirp ../server/src/main/resources/static",
+"deploy": "copyfiles -f dist/** ../server/src/main/resources/static",
 ----
 
 Run the deployment scripts:
@@ -494,10 +494,6 @@ Run the deployment scripts:
 ----
 npm run buildprod
 ----
-
-Check to see that the server's directory src/main/resources/static has your app's files. 
-
-Restart the server.
 
 In your browser go to the Spring Boot URL: http://localhost:8080. The myStoreApp is rendered by the Spring Boot server.
 

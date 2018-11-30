@@ -438,7 +438,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download and install the current version of Node.js from <a href="https://nodejs.org" class="bare">https://nodejs.org</a></p>
+<p>Download and install the current version of Node.js from <a href="https://nodejs.org" class="bare">https://nodejs.org</a>. It comes with the npm project manager.</p>
 </li>
 <li>
 <p>Install Angular CLI by running the following command:</p>
@@ -451,7 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>In this tutorial we&#8217;ll use Angular 5 and Angular CLI 1.5.0 (to check the version: <code>ng -v</code>).</p>
+<p>In this tutorial we&#8217;ll use Angular 7 and Angular CLI 7.1 (to check the version: <code>ng version</code>).</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -460,7 +460,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The instructions in this file are written for Java developers who are familiar with Spring Boot, have Java 8 installed and know how run a Java app from an IDE or using Maven.
+Yarn is faster than npm, but you have to install it separately: <code>npm install yarn</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The instructions in this file are written for Java developers who are familiar with Spring Boot, have Java 8+ installed and know how run a Java app from an IDE or using Maven.
 </td>
 </tr>
 </table>
@@ -471,7 +483,7 @@ The instructions in this file are written for Java developers who are familiar w
 <h2 id="starting-the-java-spring-boot-server"><a class="anchor" href="#starting-the-java-spring-boot-server"></a><a class="link" href="#starting-the-java-spring-boot-server">1. Starting the Java Spring Boot server</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The code of the Spring Boot server that serves that product data is located in the directory server. This app starts on port 8080 and serves the data in a JSON format. Start this server either as a Java app in your IDE, or by running <code>mvn spring-boot:run</code>.</p>
+<p>The code of the Spring Boot server that serves that product data is located in the directory called <strong>server</strong>. This app starts on port 8080 and serves the data in a JSON format. Start this server either as a Java app in your IDE, or by running <code>mvn spring-boot:run</code>.</p>
 </div>
 <div class="paragraph">
 <p>To see the data about all products, start the app and enter the following URL in the browser: <a href="http://localhost:8080/api/products" class="bare">http://localhost:8080/api/products</a>. To see the data about a single product, specify its ID (from 0 to 5), e.g. <a href="http://localhost:8080/api/products/0" class="bare">http://localhost:8080/api/products/0</a>.</p>
@@ -509,7 +521,13 @@ The instructions in this file are written for Java developers who are familiar w
 <p><code>ng new myStore</code></p>
 </div>
 <div class="paragraph">
-<p>Open the myStore directory in your IDE.</p>
+<p>Answer No to the question if you want to add Angular routing (we&#8217;ll do it manually).</p>
+</div>
+<div class="paragraph">
+<p>Select CSS as your stylesheet format.</p>
+</div>
+<div class="paragraph">
+<p>After the project is generated and all dependencies are installed, open the myStore directory in your IDE.</p>
 </div>
 <div class="paragraph">
 <p>In the myStore app, we’ll use the Bootstrap 4 framework for styling. Because Bootstrap depends on jQuery, we&#8217;ll install Bootstrap and its dependencies (jQuery and popper.js) as well.</p>
@@ -519,29 +537,29 @@ The instructions in this file are written for Java developers who are familiar w
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">npm i bootstrap@next jquery popper.js --save-prod</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">yarn add bootstrap jquery popper.js</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Add Bootstrap styles to the <code>styles</code> section in .angular-cli.json so it looks as follows:</p>
+<p>Add Bootstrap styles to the <code>styles</code> section in angular.json so it looks as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>"styles": [
   "styles.css",
-  "../node_modules/bootstrap/dist/css/bootstrap.min.css"
+  "./node_modules/bootstrap/dist/css/bootstrap.min.css"
 ],</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Add the required scripts for Bootstrap, and jQuery by modifying the section <code>scripts</code> in .angular-cli.json to look as follows:</p>
+<p>Add the required scripts for Bootstrap, and jQuery by modifying the section <code>scripts</code> in angular.json to look as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code>"scripts": [
-  "../node_modules/jquery/dist/jquery.min.js",
-  "../node_modules/popper.js/dist/umd/popper.min.js",
-  "../node_modules/bootstrap/dist/js/bootstrap.min.js"
+  "./node_modules/jquery/dist/jquery.min.js",
+  "./node_modules/popper.js/dist/umd/popper.min.js",
+  "./node_modules/bootstrap/dist/js/bootstrap.min.js"
 ],</code></pre>
 </div>
 </div>
@@ -561,38 +579,21 @@ The instructions in this file are written for Java developers who are familiar w
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>ng g c home -spec false
-ng g c navbar -spec false
-ng g c product-item -spec false
-ng g c product-detail -spec false</code></pre>
+<pre class="highlightjs highlight"><code>ng g c home --spec false
+ng g c navbar --spec false
+ng g c product-item --spec false
+ng g c product-detail --spec false</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Each of the above components is generated in a separate folder. Open the file app.module.ts - Angular CLI has added required import statements and declared all of the above components there.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Angular CLI 1.5.0 has a bug and you need to manually update the first line in the generated .ts files of the components to look like this:
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">import {Component, OnInit, ViewEncapsulation} from '@angular/core';</code></pre>
-</div>
-</div>
 <div class="paragraph">
-<p>Using the command <code>ng g s</code> generate the product service that will provide the data to some of the above components. Since we&#8217;ll use this service in more than one component, we&#8217;ll generate it in the shared dir. Specify the <code>-m</code> option so it&#8217;ll add <code>ProductService</code> the <code>providers</code> property in <code>@NgModule</code> the app.module.ts:</p>
+<p>Using the command <code>ng g s</code> generate the product service that will provide the data to some of the above components. Since we&#8217;ll use this service in more than one component, we&#8217;ll generate it in the shared dir:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>ng g s shared/product -spec false -m app.module</code></pre>
+<pre class="highlightjs highlight"><code>ng g s shared/product --spec false</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -678,13 +679,13 @@ Angular CLI 1.5.0 has a bug and you need to manually update the first line in th
 </div>
 </div>
 <div class="paragraph">
-<p>The browser shows the window with a light grey Navbar on top.</p>
+<p>Direct your browser to localhost:4200. The browser shows the window with a light grey Navbar on top.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="product-service"><a class="anchor" href="#product-service"></a><a class="link" href="#product-service">2.5. Product service</a></h3>
 <div class="paragraph">
-<p>The product service will be responsible for service product data. In the shared directory, let&#8217;s create a file product.ts defining the <code>Product</code> type:</p>
+<p>The product service will be responsible for service product data. In the <strong>shared</strong> directory, let&#8217;s create a file product.ts and define the <code>Product</code> type there:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -712,7 +713,9 @@ The provider for <code>ProductService</code> is already declared in <code>AppMod
 import {HttpClient} from '@angular/common/http';
 import {Product} from './product';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ProductService {
 
   constructor(private httpClient: HttpClient) { }
@@ -1005,13 +1008,13 @@ h5 {
 </div>
 </div>
 <div class="sect2">
-<h3 id="deploying-in-spring-boot-if-time-permits"><a class="anchor" href="#deploying-in-spring-boot-if-time-permits"></a><a class="link" href="#deploying-in-spring-boot-if-time-permits">2.10. Deploying in Spring Boot (if time permits)</a></h3>
+<h3 id="deploying-in-spring-boot"><a class="anchor" href="#deploying-in-spring-boot"></a><a class="link" href="#deploying-in-spring-boot">2.10. Deploying in Spring Boot</a></h3>
 <div class="paragraph">
 <p>Install packages for removing files/dirs (rimraf), copying files (copyfiles), and creating new dirs (mkdirp):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">npm i rimraf copyfiles mkdirp --save-dev</code></pre>
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">yarn add rimraf copyfiles mkdirp --save-dev</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1021,8 +1024,8 @@ h5 {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">"buildprod": "ng build --prod",
 "postbuildprod": "npm run deploy",
-"predeploy": "rimraf .../server/src/main/resources/static &amp;&amp; mkdirp ../server/src/main/resources/static",
-"deploy": "copyfiles -f dist/** ../server/src/main/resources/static",</code></pre>
+"predeploy": "rimraf ../server/src/main/resources/static &amp;&amp; mkdirp ../server/src/main/resources/static",
+"deploy": "copyfiles -f dist/**/* ../server/src/main/resources/static",</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1032,6 +1035,12 @@ h5 {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">npm run buildprod</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Check to see that the server&#8217;s directory src/main/resources/static has your app&#8217;s files.</p>
+</div>
+<div class="paragraph">
+<p>Restart the server.</p>
 </div>
 <div class="paragraph">
 <p>In your browser go to the Spring Boot URL: <a href="http://localhost:8080" class="bare">http://localhost:8080</a>. The myStoreApp is rendered by the Spring Boot server.</p>
@@ -1048,7 +1057,7 @@ h5 {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-08 10:36:38 EST
+Last updated 2018-11-30 11:41:11 EST
 </div>
 </div>
 </body>
